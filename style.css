@@ -1,5 +1,15 @@
 .p {
+  font-size: 2rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.body {
+  background-color: brown;
 }
 
 .h2 {
-}
+  font-size: 3rem;
+  color: #f3e074;
+  text-align: center;
+  font-weight: 100;
