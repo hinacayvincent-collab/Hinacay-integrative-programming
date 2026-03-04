@@ -1,0 +1,57 @@
+Add two (2) new pages:
+profile.html
+settings.html
+
+index.html → login.html → profile.html → settings.html
+Also required:
+profile.html → Logout → login.html
+profile.html → Home → index.html
+settings.html → Back to Profile → profile.html
+
+Profile Page (profile.html)
+Must include:
+Header / Navigation
+Home link
+Logout link
+
+Profile Card Section
+Profile image/avatar
+Full name (hardcoded)
+Email (hardcoded/fake)
+Address (hardcoded/fake)
+
+Info Section
+Choose at least one:
+About Me
+Account Details
+User Bio
+
+Settings Link
+Button or link to:
+settings.html
+
+
+Settings Page (settings.html)
+Static UI only.
+Must include:
+Page Header
+Title: Settings
+
+Settings Form (visual only)
+Include at least:
+Change Email (This field will be synchronized with an external identity provider in later phases.)
+Change Address (Geographic data binding will be introduced in future builds.)
+Change Password (Argon2id hashing with memory-hard parameters will be activated in future builds.)
+Theme option (checkbox or select)
+Save button (visual only)
+
+ Navigation
+Back to Profile → profile.html
+
+Design Rules
+Must match my landing page theme
+Use same colors, fonts, style
+Dashboard-style layout encouraged
+Clean panels / cards / sections
+No templates.
+Original layout.
