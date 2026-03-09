@@ -533,3 +533,93 @@ body::after {
   color: #4facfe;
   transform: translateX(-5px);
 }
+
+/* global admin and management styles */
+.admin-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  z-index: 1000;
+}
+
+.admin-nav .nav-brand {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: #00f2fe;
+}
+
+.admin-nav .nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.admin-nav a,
+.admin-nav button {
+  color: #00f2fe;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+}
+
+.admin-nav button {
+  background: transparent;
+  border: 1px solid #00f2fe;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.admin-nav button:hover {
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+}
+
+.admin-nav a:hover,
+.admin-nav button:hover {
+  color: #4facfe;
+  text-shadow: 0 0 10px #00f2fe;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.8rem 1rem;
+  text-align: left;
+}
+
+.user-table th {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.user-table tbody tr:hover {
+  background: rgba(0, 255, 255, 0.05);
+}
+
+.delete-btn {
+  background: transparent;
+  border: 1px solid #ff6b6b;
+  color: #ff6b6b;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #ff6b6b;
+  color: #000;
+}

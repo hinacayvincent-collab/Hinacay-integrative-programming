@@ -54,8 +54,19 @@ function validateLoginForm(event) {
   localStorage.setItem("isLoggedIn", "true");
   localStorage.setItem("userEmail", email.value.trim());
 
+  // assign role based on email for demo purposes
+  const role = email.value.trim().toLowerCase().includes("admin")
+    ? "admin"
+    : "user";
+  localStorage.setItem("userRole", role);
+
+  // redirect depending on role
   setTimeout(() => {
-    window.location.href = "profile.html";
+    if (role === "admin") {
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "profile.html";
+    }
   }, 1500);
 }
 
@@ -137,8 +148,18 @@ function validateSignupForm(event) {
   localStorage.setItem("userEmail", email.value.trim());
   localStorage.setItem("userName", fullname.value.trim());
 
+  // new signups default to regular user unless email contains admin
+  const role = email.value.trim().toLowerCase().includes("admin")
+    ? "admin"
+    : "user";
+  localStorage.setItem("userRole", role);
+
   setTimeout(() => {
-    window.location.href = "profile.html";
+    if (role === "admin") {
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "profile.html";
+    }
   }, 1500);
 }
 
@@ -150,6 +171,7 @@ function logout() {
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("userEmail");
   localStorage.removeItem("userName");
+  localStorage.removeItem("userRole");
 
   showSuccessAlert("You have been logged out successfully. 👋");
 
@@ -187,6 +209,9 @@ function showSuccessAlert(message) {
 
 function checkLoginStatus() {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const userRole = localStorage.getItem("userRole");
+
+  // protect normal user pages
   if (
     !isLoggedIn &&
     (window.location.pathname.includes("profile.html") ||
@@ -194,6 +219,21 @@ function checkLoginStatus() {
   ) {
     showErrorAlert("You must be logged in to access this page.");
     window.location.href = "login.html";
+  }
+
+  // protect admin pages
+  if (
+    window.location.pathname.includes("admin.html") ||
+    window.location.pathname.includes("manage-users.html") ||
+    window.location.pathname.includes("manage-data.html")
+  ) {
+    if (!isLoggedIn) {
+      showErrorAlert("You must be logged in to access this page.");
+      window.location.href = "login.html";
+    } else if (userRole !== "admin") {
+      showErrorAlert("You do not have permission to view that page.");
+      window.location.href = "profile.html";
+    }
   }
 }
 

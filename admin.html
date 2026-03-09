@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXUS – Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .admin-container {
+        min-height: 100vh;
+        padding-top: 120px;
+        padding-left: 5%;
+        padding-right: 5%;
+        padding-bottom: 5rem;
+        color: #e5e7eb;
+      }
+
+      .admin-nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 5%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        z-index: 1000;
+      }
+
+      .admin-nav .nav-brand {
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 3px;
+        color: #00f2fe;
+      }
+
+      .admin-nav a,
+      .admin-nav button {
+        color: #00f2fe;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+      }
+
+      .admin-nav a:hover,
+      .admin-nav button:hover {
+        color: #4facfe;
+        text-shadow: 0 0 10px #00f2fe;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="admin-nav">
+      <div class="nav-brand">NEXUS</div>
+      <div class="nav-links">
+        <a href="profile.html">Home</a>
+        <a href="manage-users.html">Manage Users</a>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </nav>
+
+    <section class="admin-container">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome, administrator. Use the menu above to manage system data.</p>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>

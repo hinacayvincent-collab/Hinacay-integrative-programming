@@ -298,7 +298,23 @@
   <body>
     <nav class="settings-nav">
       <div class="nav-brand">NEXUS</div>
+      <div class="nav-links">
+        <a href="profile.html">Profile</a>
+        <a href="index.html">Home</a>
+      </div>
     </nav>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const role = localStorage.getItem("userRole");
+        if (role === "admin") {
+          const navLinks = document.querySelector(".settings-nav .nav-links");
+          const link = document.createElement("a");
+          link.href = "admin.html";
+          link.textContent = "Admin Dashboard";
+          navLinks.insertBefore(link, navLinks.firstChild);
+        }
+      });
+    </script>
 
     <section class="settings-container">
       <a href="profile.html" class="back-link">← Back to Profile</a>

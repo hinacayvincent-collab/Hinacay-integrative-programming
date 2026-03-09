@@ -287,6 +287,18 @@
         <button onclick="logout()">Logout</button>
       </div>
     </nav>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const role = localStorage.getItem("userRole");
+        if (role === "admin") {
+          const navLinks = document.querySelector(".nav-links");
+          const link = document.createElement("a");
+          link.href = "admin.html";
+          link.textContent = "Admin Dashboard";
+          navLinks.insertBefore(link, navLinks.firstChild);
+        }
+      });
+    </script>
 
     <section class="profile-container">
       <div class="profile-header">
