@@ -2,10 +2,8 @@
 // CLIENT-SIDE VALIDATION SCRIPT FOR NEXUS
 // ==========================================
 
-// Email validation regex pattern
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Password minimum length requirement
 const MIN_PASSWORD_LENGTH = 6;
 
 // ==========================================
@@ -18,17 +16,14 @@ function validateLoginForm(event) {
 
   event.preventDefault();
 
-  // Get form inputs
   const email = document.getElementById("email");
   const password = document.getElementById("password");
 
   let isValid = true;
   let errorMessage = "";
 
-  // Clear previous error messages
   clearErrorMessages();
 
-  // Validate email
   if (!email.value.trim()) {
     isValid = false;
     errorMessage += "• Email address is required\n";
@@ -39,7 +34,6 @@ function validateLoginForm(event) {
     highlightError(email);
   }
 
-  // Validate password
   if (!password.value) {
     isValid = false;
     errorMessage += "• Password is required\n";
@@ -55,16 +49,22 @@ function validateLoginForm(event) {
     return false;
   }
 
-  // If validation passes, show success message
   showSuccessAlert("Login successful! Welcome back. 🚀");
 
-  // Store user session (localStorage)
   localStorage.setItem("isLoggedIn", "true");
   localStorage.setItem("userEmail", email.value.trim());
 
-  // Redirect to profile after 1.5 seconds
+  // assign role based on email for demo purposes
+  const role = email.value.trim().toLowerCase().includes("admin") ? "admin" : "user";
+  localStorage.setItem("userRole", role);
+
+  // redirect depending on role
   setTimeout(() => {
-    window.location.href = "profile.html";
+    if (role === "admin") {
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "profile.html";
+    }
   }, 1500);
 }
 
@@ -78,7 +78,6 @@ function validateSignupForm(event) {
 
   event.preventDefault();
 
-  // Get form inputs
   const fullname = document.getElementById("fullname");
   const email = document.getElementById("email");
   const password = document.getElementById("password");
@@ -88,10 +87,8 @@ function validateSignupForm(event) {
   let isValid = true;
   let errorMessage = "";
 
-  // Clear previous error messages
   clearErrorMessages();
 
-  // Validate full name
   if (!fullname.value.trim()) {
     isValid = false;
     errorMessage += "• Full name is required\n";
@@ -102,7 +99,6 @@ function validateSignupForm(event) {
     highlightError(fullname);
   }
 
-  // Validate email
   if (!email.value.trim()) {
     isValid = false;
     errorMessage += "• Email address is required\n";
@@ -113,7 +109,6 @@ function validateSignupForm(event) {
     highlightError(email);
   }
 
-  // Validate password
   if (!password.value) {
     isValid = false;
     errorMessage += "• Password is required\n";
@@ -124,7 +119,6 @@ function validateSignupForm(event) {
     highlightError(password);
   }
 
-  // Validate password confirmation
   if (!confirmPassword.value) {
     isValid = false;
     errorMessage += "• Please confirm your password\n";
@@ -136,7 +130,6 @@ function validateSignupForm(event) {
     highlightError(confirmPassword);
   }
 
-  // Validate terms acceptance
   if (!termsCheckbox.checked) {
     isValid = false;
     errorMessage += "• You must agree to the Terms & Conditions\n";
@@ -147,17 +140,22 @@ function validateSignupForm(event) {
     return false;
   }
 
-  // If validation passes, show success message
   showSuccessAlert("Account created successfully! Welcome to NEXUS. 🌟");
 
-  // Store user session
   localStorage.setItem("isLoggedIn", "true");
   localStorage.setItem("userEmail", email.value.trim());
   localStorage.setItem("userName", fullname.value.trim());
 
-  // Redirect to profile after 1.5 seconds
+  // new signups default to regular user unless email contains admin
+  const role = email.value.trim().toLowerCase().includes("admin") ? "admin" : "user";
+  localStorage.setItem("userRole", role);
+
   setTimeout(() => {
-    window.location.href = "profile.html";
+    if (role === "admin") {
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "profile.html";
+    }
   }, 1500);
 }
 
@@ -166,14 +164,12 @@ function validateSignupForm(event) {
 // ==========================================
 
 function logout() {
-  // Clear user session
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("userEmail");
   localStorage.removeItem("userName");
 
   showSuccessAlert("You have been logged out successfully. 👋");
 
-  // Redirect to home page after 1 second
   setTimeout(() => {
     window.location.href = "index.html";
   }, 1000);
@@ -183,13 +179,11 @@ function logout() {
 // HELPER FUNCTIONS
 // ==========================================
 
-// Highlight input field with error
 function highlightError(inputElement) {
   inputElement.style.borderColor = "#ff6b6b";
   inputElement.style.backgroundColor = "rgba(255, 107, 107, 0.1)";
 }
 
-// Remove error highlighting from all inputs
 function clearErrorMessages() {
   const inputs = document.querySelectorAll(
     'input[type="email"], input[type="password"], input[type="text"]',
@@ -200,19 +194,19 @@ function clearErrorMessages() {
   });
 }
 
-// Show error alert
 function showErrorAlert(message) {
   alert("❌ Validation Error:\n\n" + message);
 }
 
-// Show success alert
 function showSuccessAlert(message) {
   alert("✅ " + message);
 }
 
-// Check if user is logged in
 function checkLoginStatus() {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const userRole = localStorage.getItem("userRole");
+
+  // protect normal user pages
   if (
     !isLoggedIn &&
     (window.location.pathname.includes("profile.html") ||
@@ -221,6 +215,21 @@ function checkLoginStatus() {
     showErrorAlert("You must be logged in to access this page.");
     window.location.href = "login.html";
   }
+
+  // protect admin pages
+  if (
+    window.location.pathname.includes("admin.html") ||
+    window.location.pathname.includes("manage-users.html") ||
+    window.location.pathname.includes("manage-data.html")
+  ) {
+    if (!isLoggedIn) {
+      showErrorAlert("You must be logged in to access this page.");
+      window.location.href = "login.html";
+    } else if (userRole !== "admin") {
+      showErrorAlert("You do not have permission to view that page.");
+      window.location.href = "profile.html";
+    }
+  }
 }
 
 // ==========================================
@@ -228,21 +237,17 @@ function checkLoginStatus() {
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Check login status on protected pages
   checkLoginStatus();
 
-  // Attach validation to login form
   const loginForm = document.querySelector(".login-form");
   if (loginForm && window.location.pathname.includes("login.html")) {
     loginForm.addEventListener("submit", validateLoginForm);
   }
 
-  // Attach validation to signup form
   if (loginForm && window.location.pathname.includes("signup.html")) {
     loginForm.addEventListener("submit", validateSignupForm);
   }
 
-  // Attach logout button
   const logoutBtn = document.querySelector('button[onclick="logout()"]');
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function (e) {
@@ -251,7 +256,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Alternative logout button click handler
   const logoutButtons = document.querySelectorAll("button");
   logoutButtons.forEach((btn) => {
     if (
