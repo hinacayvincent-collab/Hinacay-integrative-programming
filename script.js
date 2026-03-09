@@ -55,7 +55,9 @@ function validateLoginForm(event) {
   localStorage.setItem("userEmail", email.value.trim());
 
   // assign role based on email for demo purposes
-  const role = email.value.trim().toLowerCase().includes("admin") ? "admin" : "user";
+  const role = email.value.trim().toLowerCase().includes("admin")
+    ? "admin"
+    : "user";
   localStorage.setItem("userRole", role);
 
   // redirect depending on role
@@ -147,7 +149,9 @@ function validateSignupForm(event) {
   localStorage.setItem("userName", fullname.value.trim());
 
   // new signups default to regular user unless email contains admin
-  const role = email.value.trim().toLowerCase().includes("admin") ? "admin" : "user";
+  const role = email.value.trim().toLowerCase().includes("admin")
+    ? "admin"
+    : "user";
   localStorage.setItem("userRole", role);
 
   setTimeout(() => {
@@ -167,6 +171,7 @@ function logout() {
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("userEmail");
   localStorage.removeItem("userName");
+  localStorage.removeItem("userRole");
 
   showSuccessAlert("You have been logged out successfully. 👋");
 
