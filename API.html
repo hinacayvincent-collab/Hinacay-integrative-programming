@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXUS API - Country Info</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #e5e7eb;
+        min-height: 100vh;
+        background: #0f2027;
+        margin: 0;
+      }
+      .api-page {
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem;
+      }
+      .api-card {
+        max-width: 700px;
+        width: 100%;
+        background: rgba(7, 23, 45, 0.85);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        border-radius: 20px;
+        box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        padding: 2.5rem;
+      }
+      .api-card h1 {
+        margin-bottom: 0.5rem;
+        font-size: clamp(1.6rem, 4vw, 2.4rem);
+        color: #00e5ff;
+        text-align: center;
+      }
+      .api-card p.subtitle {
+        text-align: center;
+        margin-bottom: 1.8rem;
+        color: #94a3b8;
+      }
+      form {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+      input[type="text"] {
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(15, 32, 39, 0.7);
+        color: #e5e7eb;
+        border-radius: 10px;
+        padding: 0.8rem 1rem;
+      }
+      input[type="text"]:focus {
+        outline: 2px solid #22d3ee;
+      }
+      button {
+        border: 1px solid #00e5ff;
+        background: rgba(0, 229, 255, 0.2);
+        color: #e0f7ff;
+        border-radius: 10px;
+        padding: 0.8rem 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      button:hover {
+        background: rgba(0, 229, 255, 0.5);
+        transform: translateY(-1px);
+      }
+      .result {
+        margin-top: 1rem;
+      }
+      .country-card {
+        background: rgba(15, 32, 39, 0.75);
+        border: 1px solid rgba(2, 132, 199, 0.3);
+        border-radius: 12px;
+        padding: 1rem;
+      }
+      .country-card h2 {
+        margin: 0.5rem 0 0.4rem;
+      }
+      .country-flag {
+        width: 100px;
+        max-width: 100%;
+        border: 1px solid #94a3b8;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+      .error {
+        color: #fb7185;
+      }
+      .home-link {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: #67e8f9;
+        text-decoration: none;
+        border: 1px solid #67e8f9;
+        border-radius: 999px;
+        padding: 0.45rem 0.9rem;
+      }
+      .home-link:hover {
+        background: rgba(103, 232, 249, 0.15);
+      }
+      @media (max-width: 640px) {
+        form {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="api-page">
+      <section class="api-card">
+        <a href="index.html" class="home-link">⟵ Back to Landing</a>
+        <h1>NEXUS API: Country Details</h1>
+        <p class="subtitle">
+          Type a country name and get instant details via the REST Countries
+          open API.
+        </p>
+        <form id="countryForm">
+          <input
+            type="text"
+            id="countryInput"
+            placeholder="e.g. Japan"
+            aria-label="Country name"
+            required
+          />
+          <button type="submit">Fetch</button>
+        </form>
+        <div id="output" class="result"></div>
+      </section>
+    </main>
+
+    <script>
+      const countryForm = document.getElementById("countryForm");
+      const output = document.getElementById("output");
+
+      countryForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const country = document.getElementById("countryInput").value.trim();
+        output.innerHTML = "";
+
+        if (!country) {
+          output.innerHTML =
+            '<p class="error">Please enter a country name.</p>';
+          return;
+        }
+
+        output.innerHTML = "<p>Loading data...</p>";
+
+        fetch(
+          `https://restcountries.com/v3.1/name/${encodeURIComponent(country)}?fullText=false`,
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Country not found");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (!Array.isArray(data) || data.length === 0) {
+              output.innerHTML = '<p class="error">No results found.</p>';
+              return;
+            }
+
+            const c = data[0];
+            const currencies = c.currencies
+              ? Object.values(c.currencies)
+                  .map((cur) => cur.name + " (" + cur.symbol + ")")
+                  .join(", ")
+              : "N/A";
+            const languages = c.languages
+              ? Object.values(c.languages).join(", ")
+              : "N/A";
+
+            output.innerHTML = `
+                        <div class="country-card">
+                            <img class="country-flag" src="${c.flags.svg || c.flags.png}" alt="Flag of ${c.name.common}" />
+                            <h2>${c.name.common} ${c.name.official ? "(" + c.name.official + ")" : ""}</h2>
+                            <p><strong>Capital:</strong> ${c.capital ? c.capital.join(", ") : "N/A"}</p>
+                            <p><strong>Region:</strong> ${c.region} • ${c.subregion || "N/A"}</p>
+                            <p><strong>Population:</strong> ${c.population.toLocaleString()}</p>
+                            <p><strong>Area:</strong> ${c.area.toLocaleString()} km²</p>
+                            <p><strong>Currencies:</strong> ${currencies}</p>
+                            <p><strong>Languages:</strong> ${languages}</p>
+                        </div>
+                    `;
+          })
+          .catch((err) => {
+            output.innerHTML = `<p class="error">${err.message === "Country not found" ? "Country not found. Please check your spelling." : "Failed to fetch data. Please try again later."}</p>`;
+          });
+      });
+    </script>
+  </body>
+</html>
