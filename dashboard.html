@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXUS – Digital Identity Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .dashboard-nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 5%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        z-index: 1000;
+      }
+
+      .dashboard-nav a,
+      .dashboard-nav button {
+        color: #00f2fe;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+      }
+
+      .dashboard-nav a:hover,
+      .dashboard-nav button:hover {
+        color: #4facfe;
+        text-shadow: 0 0 10px #00f2fe;
+      }
+
+      .dashboard-nav .nav-brand {
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 3px;
+      }
+
+      .dashboard-nav .nav-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .dashboard-nav button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .dashboard-content {
+        margin-top: 100px;
+        padding: 2rem 5%;
+        min-height: calc(100vh - 100px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .dashboard-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #00f2fe;
+        font-size: 2.5rem;
+        text-shadow: 0 0 20px #00f2fe;
+        letter-spacing: 2px;
+      }
+
+      .identity-system {
+        background: rgba(7, 23, 45, 0.85);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        border-radius: 20px;
+        box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        padding: 2.5rem;
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .system-status {
+        margin-bottom: 1.5rem;
+      }
+
+      .status-indicator {
+        display: inline-block;
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        margin: 0.25rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .identity-card {
+        background: rgba(15, 32, 39, 0.7);
+        border: 1px solid rgba(2, 132, 199, 0.3);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 1.5rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .identity-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid #00f2fe;
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+      }
+
+      .identity-info h3 {
+        color: #e5e7eb;
+        margin: 0.5rem 0;
+        font-size: 1.5rem;
+      }
+
+      .identity-info p {
+        color: #94a3b8;
+        margin: 0.25rem 0;
+        font-size: 1rem;
+      }
+
+      .generate-btn {
+        background: linear-gradient(135deg, #00f2fe, #4facfe);
+        border: none;
+        color: #0f2027;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
+      }
+
+      .loading {
+        color: #00f2fe;
+        font-size: 1.1rem;
+        margin: 1rem 0;
+      }
+
+      @media (max-width: 768px) {
+        .dashboard-content {
+          padding: 2rem 1rem;
+        }
+
+        .identity-card {
+          padding: 1.5rem;
+        }
+
+        .dashboard-title {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="dashboard-nav">
+      <div class="nav-brand">NEXUS</div>
+      <div class="nav-links">
+        <a href="index.html">HOME</a>
+        <a href="API.html">API DEMO</a>
+        <button id="logoutBtn">LOGOUT</button>
+      </div>
+    </nav>
+
+    <main class="dashboard-content">
+      <h1 class="dashboard-title">DIGITAL IDENTITY SYSTEM</h1>
+
+      <section class="identity-system">
+        <div class="system-status">
+          <span class="status-indicator">DIGITAL IDENTITY LOADED</span>
+          <span class="status-indicator" id="statusIndicator"
+            >STATUS: ACTIVE</span
+          >
+          <span class="status-indicator" id="accessIndicator"
+            >ACCESS LEVEL: USER</span
+          >
+        </div>
+
+        <div id="identityCard" class="identity-card">
+          <p class="loading">Loading digital identity...</p>
+        </div>
+
+        <button id="generateBtn" class="generate-btn">
+          GENERATE NEW IDENTITY
+        </button>
+      </section>
+    </main>
+
+    <script>
+      // Check if user is logged in
+      if (!localStorage.getItem("isLoggedIn")) {
+        window.location.href = "login.html";
+      }
+
+      // Set access level based on role
+      const userRole = localStorage.getItem("userRole") || "user";
+      document.getElementById("accessIndicator").textContent =
+        `ACCESS LEVEL: ${userRole.toUpperCase()}`;
+
+      // Logout functionality
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", function () {
+          localStorage.removeItem("isLoggedIn");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userRole");
+          window.location.href = "index.html";
+        });
+
+      // Function to load identity from Random User API
+      async function loadIdentity() {
+        const card = document.getElementById("identityCard");
+        card.innerHTML = '<p class="loading">Loading digital identity...</p>';
+
+        try {
+          const response = await fetch("https://randomuser.me/api/");
+          const data = await response.json();
+          const user = data.results[0];
+
+          const fullName = `${user.name.first} ${user.name.last}`;
+          const email = user.email;
+          const location = `${user.location.city}, ${user.location.country}`;
+          const avatar = user.picture.large;
+
+          card.innerHTML = `
+            <img src="${avatar}" alt="Digital Identity Avatar" class="identity-avatar" />
+            <div class="identity-info">
+              <h3>${fullName}</h3>
+              <p><strong>Email:</strong> ${email}</p>
+              <p><strong>Location:</strong> ${location}</p>
+            </div>
+          `;
+        } catch (error) {
+          card.innerHTML =
+            '<p class="loading" style="color: #fb7185;">Failed to load identity. Please try again.</p>';
+          console.error("Error loading identity:", error);
+        }
+      }
+
+      // Load identity on page load
+      loadIdentity();
+
+      // Generate new identity button
+      document
+        .getElementById("generateBtn")
+        .addEventListener("click", loadIdentity);
+    </script>
+  </body>
+</html>

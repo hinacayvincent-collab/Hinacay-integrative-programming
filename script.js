@@ -65,7 +65,7 @@ function validateLoginForm(event) {
     if (role === "admin") {
       window.location.href = "admin.html";
     } else {
-      window.location.href = "profile.html";
+      window.location.href = "dashboard.html";
     }
   }, 1500);
 }
